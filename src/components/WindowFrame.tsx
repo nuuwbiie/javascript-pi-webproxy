@@ -1,7 +1,39 @@
-import { Maximize2, Minus, Square, X } from 'lucide-react'
 import { useRef, type PointerEvent, type ReactNode } from 'react'
 import { useWindows } from '../app/WindowContext'
-import type { WindowState } from '../types'
+import type { WindowState, AppId } from '../types'
+import {
+  WinFileExplorerIcon,
+  WinCvIcon,
+  WinPhotosIcon,
+  WinNotepadIcon,
+  WinEdgeIcon,
+  WinSettingsIcon,
+  WinRecycleBinIcon,
+} from './WindowsIcons'
+
+// Helper to render mini icon in titlebar
+function getTitleIcon(appId: AppId) {
+  switch (appId) {
+    case 'members':
+    case 'profile':
+      return <WinFileExplorerIcon style={{ width: 16, height: 16 }} />
+    case 'cvs':
+    case 'cv-viewer':
+      return <WinCvIcon style={{ width: 16, height: 16 }} />
+    case 'memories':
+      return <WinPhotosIcon style={{ width: 16, height: 16 }} />
+    case 'welcome':
+      return <WinNotepadIcon style={{ width: 16, height: 16 }} />
+    case 'links':
+      return <WinEdgeIcon style={{ width: 16, height: 16 }} />
+    case 'about':
+      return <WinSettingsIcon style={{ width: 16, height: 16 }} />
+    case 'trash':
+      return <WinRecycleBinIcon style={{ width: 16, height: 16 }} />
+    default:
+      return <WinFileExplorerIcon style={{ width: 16, height: 16 }} />
+  }
+}
 
 export function WindowFrame({ window: item, children }: { window: WindowState; children: ReactNode }) {
   const { close, focus, minimize, move, resize, toggleMaximize } = useWindows()
@@ -34,25 +66,91 @@ export function WindowFrame({ window: item, children }: { window: WindowState; c
   if (item.minimized) return null
 
   return (
-    <section className={`os-window ${item.maximized ? 'is-maximized' : ''}`} style={style} onPointerDown={() => focus(item.id)} role="dialog" aria-label={item.title}>
-      <div className="window-titlebar" onPointerDown={onDrag} onPointerMove={onDragMove} onPointerUp={() => { dragStart.current = null }} onDoubleClick={() => toggleMaximize(item.id)}>
-        <div className="traffic-lights" aria-hidden="true"><span className="red" /><span className="yellow" /><span className="green" /></div>
-        <span className="window-title">{item.title}</span>
-        <div className="window-actions">
-          <button aria-label={`Minimalkan ${item.title}`} onClick={() => minimize(item.id)}><Minus size={15} /></button>
-          <button aria-label={item.maximized ? `Pulihkan ${item.title}` : `Maksimalkan ${item.title}`} onClick={() => toggleMaximize(item.id)}>{item.maximized ? <Square size={13} /> : <Maximize2 size={14} />}</button>
-          <button aria-label={`Tutup ${item.title}`} onClick={() => close(item.id)}><X size={16} /></button>
+    <section
+      className={`win11-window os-window ${item.maximized ? 'is-maximized' : ''}`}
+      style={style}
+      onPointerDown={() => focus(item.id)}
+      role="dialog"
+      aria-label={item.title}
+    >
+      {/* Windows 11 Titlebar */}
+      <div
+        className="win11-titlebar"
+        onPointerDown={onDrag}
+        onPointerMove={onDragMove}
+        onPointerUp={() => { dragStart.current = null }}
+        onDoubleClick={() => toggleMaximize(item.id)}
+      >
+        <div className="win11-titlebar-lead">
+          <span className="win11-titlebar-icon" aria-hidden="true">
+            {getTitleIcon(item.appId)}
+          </span>
+          <span className="win11-titlebar-title">{item.title}</span>
+        </div>
+
+        <div className="win11-caption-buttons">
+          <button
+            className="win11-caption-btn win11-minimize"
+            aria-label={`Minimalkan ${item.title}`}
+            onClick={(e) => {
+              e.stopPropagation()
+              minimize(item.id)
+            }}
+          >
+            <svg width="10" height="1" viewBox="0 0 10 1"><path fill="currentColor" d="M0 0h10v1H0z" /></svg>
+          </button>
+
+          <button
+            className="win11-caption-btn win11-maximize"
+            aria-label={item.maximized ? `Pulihkan ${item.title}` : `Maksimalkan ${item.title}`}
+            onClick={(e) => {
+              e.stopPropagation()
+              toggleMaximize(item.id)
+            }}
+          >
+            {item.maximized ? (
+              /* Restore symbol: two overlapping squares */
+              <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+                <path d="M2.5 1.5h6v6h-1.5v-4.5H2.5v-1.5z" fill="currentColor" />
+                <rect x="1.5" y="3.5" width="5.5" height="5.5" stroke="currentColor" strokeWidth="1" />
+              </svg>
+            ) : (
+              /* Maximize symbol: single square */
+              <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+                <rect x="1.5" y="1.5" width="7" height="7" stroke="currentColor" strokeWidth="1" />
+              </svg>
+            )}
+          </button>
+
+          <button
+            className="win11-caption-btn win11-close"
+            aria-label={`Tutup ${item.title}`}
+            onClick={(e) => {
+              e.stopPropagation()
+              close(item.id)
+            }}
+          >
+            <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+              <path d="M1 1l8 8M9 1L1 9" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
+            </svg>
+          </button>
         </div>
       </div>
-      <div className="window-content">{children}</div>
+
+      <div className="win11-window-content window-content">{children}</div>
+
       {!item.maximized && (
         <button
-          className="resize-handle"
+          className="resize-handle win11-resize-handle"
           aria-label={`Ubah ukuran ${item.title}`}
           onPointerDown={onResize}
           onPointerMove={(event) => {
             if (!resizeStart.current) return
-            resize(item.id, Math.max(360, resizeStart.current.width + event.clientX - resizeStart.current.px), Math.max(280, resizeStart.current.height + event.clientY - resizeStart.current.py))
+            resize(
+              item.id,
+              Math.max(380, resizeStart.current.width + event.clientX - resizeStart.current.px),
+              Math.max(280, resizeStart.current.height + event.clientY - resizeStart.current.py)
+            )
           }}
           onPointerUp={() => { resizeStart.current = null }}
         />

@@ -1,50 +1,83 @@
-import { Smartphone, Sun } from 'lucide-react'
 import { useEffect } from 'react'
 import { useWindows } from '../app/WindowContext'
-import { AppView, HeroView } from '../apps/AppViews'
-import { appRegistry, desktopApps } from '../data/apps'
+import { AppView } from '../apps/AppViews'
 import { DesktopIcon } from './DesktopIcon'
 import { Taskbar } from './Taskbar'
 import { WindowFrame } from './WindowFrame'
+import {
+  WinFileExplorerIcon,
+  WinCvIcon,
+  WinPhotosIcon,
+  WinSettingsIcon,
+  WinEdgeIcon,
+  WinNotepadIcon,
+  WinRecycleBinIcon,
+} from './WindowsIcons'
+
+function SmartphoneIcon() {
+  return (
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <rect x="5" y="2" width="14" height="20" rx="2" stroke="currentColor" strokeWidth="1.6" />
+      <circle cx="12" cy="18" r="1" fill="currentColor" />
+    </svg>
+  )
+}
+
 
 export function Desktop({ onSwitchView }: { onSwitchView?: () => void }) {
   const { state, openApp } = useWindows()
 
   useEffect(() => {
-    if (state.windows.length === 0) openApp('welcome')
+    if (state.windows.length === 0) {
+      openApp('welcome')
+    }
   }, [openApp, state.windows.length])
 
+  const desktopShortcuts = [
+    { id: 'members' as const, label: 'This PC', icon: <WinFileExplorerIcon style={{ width: 44, height: 44 }} /> },
+    { id: 'welcome' as const, label: 'Welcome.txt', icon: <WinNotepadIcon style={{ width: 44, height: 44 }} /> },
+    { id: 'cvs' as const, label: 'CV ATS Tim', icon: <WinCvIcon style={{ width: 44, height: 44 }} /> },
+    { id: 'memories' as const, label: 'Photos', icon: <WinPhotosIcon style={{ width: 44, height: 44 }} /> },
+    { id: 'links' as const, label: 'Microsoft Edge', icon: <WinEdgeIcon style={{ width: 44, height: 44 }} /> },
+    { id: 'about' as const, label: 'Settings', icon: <WinSettingsIcon style={{ width: 44, height: 44 }} /> },
+    { id: 'trash' as const, label: 'Recycle Bin', icon: <WinRecycleBinIcon style={{ width: 44, height: 44 }} /> },
+  ]
+
   return (
-    <main id="main" className="desktop">
-      <aside className="desktop-icons" aria-label="Aplikasi">
-        {desktopApps.map((id) => {
-          const app = appRegistry[id]
-          return <DesktopIcon key={id} label={app.shortLabel} icon={app.icon} tone={app.tone} onOpen={() => openApp(id)} />
-        })}
+    <main id="main" className="win11-desktop desktop">
+      {/* Desktop Shortcuts Grid on the Left */}
+      <aside className="win11-desktop-icons" aria-label="Desktop Shortcuts">
+        {desktopShortcuts.map((item) => (
+          <DesktopIcon
+            key={item.id}
+            label={item.label}
+            icon={item.icon}
+            onOpen={() => openApp(item.id)}
+          />
+        ))}
       </aside>
-      <p className="desktop-note top">Five people. One connection.</p>
-      <p className="desktop-note bottom">good people<br />good progress.</p>
-      <section className="hero-window os-window" aria-label="PROXY photo board">
-        <span className="tape" aria-hidden="true" />
-        <div className="window-titlebar"><div className="traffic-lights" aria-hidden="true"><span className="red" /><span className="yellow" /><span className="green" /></div><span className="window-title">proxy.jpg</span></div>
-        <div className="window-content"><HeroView /></div>
-      </section>
-      <aside className="sticky-note" aria-label="To do">
-        <span className="tape" aria-hidden="true" />
-        <h2>To Do</h2><label><input type="checkbox" /> Kenalan sama anggota</label><label><input type="checkbox" /> Lihat CV mereka</label><label><input type="checkbox" /> Cek dokumentasi</label><label><input type="checkbox" /> Isi data asli</label><label className="done"><input type="checkbox" defaultChecked /> Be proud!</label>
-      </aside>
-      <aside className="music-widget" aria-label="Pemutar dekoratif, tidak memutar audio"><small>NOW PLAYING</small><strong>Good People</strong><span>PROXY · no autoplay</span><div><button aria-label="Sebelumnya">‹</button><button aria-label="Putar dekoratif" disabled>▶</button><button aria-label="Berikutnya">›</button></div></aside>
-      <aside className="weather-widget" aria-label="Info cuaca dekoratif">
-        <span className="weather-sun" aria-hidden="true"><Sun size={26} /></span>
-        <div><strong>27°C · Cerah</strong><small>Kampus — good day to build</small></div>
-      </aside>
-      <span className="os-watermark" aria-hidden="true">PROXY OS · v1.0 · sample mode</span>
-      {state.windows.map((item) => <WindowFrame key={item.id} window={item}><AppView appId={item.appId} payload={item.payload} onOpen={openApp} /></WindowFrame>)}
+
+      {/* Watermark in bottom right corner (Windows 11 Build watermark) */}
+      <div className="win11-watermark" aria-hidden="true">
+        <span>Windows 11 PROXY Edition</span>
+        <span>Connect &amp; Deploy · 12 Anggota</span>
+      </div>
+
+      {/* Render open Windows */}
+      {state.windows.map((item) => (
+        <WindowFrame key={item.id} window={item}>
+          <AppView appId={item.appId} payload={item.payload} onOpen={openApp} />
+        </WindowFrame>
+      ))}
+
+      {/* Switch to mobile button if available */}
       {onSwitchView && (
-        <button className="view-switch" onClick={onSwitchView} aria-pressed="false">
-          <Smartphone size={16} aria-hidden="true" /> Mode HP
+        <button className="win11-view-switch" onClick={onSwitchView} aria-pressed="false">
+          <SmartphoneIcon /> Mode HP
         </button>
       )}
+
+      {/* Windows 11 Centered Taskbar */}
       <Taskbar />
     </main>
   )
