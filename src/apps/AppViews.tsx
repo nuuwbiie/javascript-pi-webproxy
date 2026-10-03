@@ -416,7 +416,15 @@ export function TrashView() {
   )
 }
 
-export function AppView({ appId, payload, onOpen }: { appId: AppId; payload?: WindowPayload; onOpen: (id: AppId, payload?: WindowPayload) => void }) {
+export function AppView({
+  appId,
+  payload,
+  onOpen,
+}: {
+  appId: AppId
+  payload?: WindowPayload
+  onOpen: (id: AppId, payload?: WindowPayload) => void
+}) {
   const views: Record<AppId, ReactNode> = {
     welcome: <WelcomeView />,
     members: <FileExplorer onOpen={onOpen} />,

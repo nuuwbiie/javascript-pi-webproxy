@@ -1,138 +1,522 @@
-import { useState } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { AppView, MobileHeader } from '../apps/AppViews'
-import { appRegistry, desktopApps } from '../data/apps'
-import type { AppId, WindowPayload } from '../types'
+import { appRegistry } from '../data/apps'
+import { members } from '../data/members'
+import { InitialPortrait } from './Portrait'
+import type { AppId, WindowPayload, Member } from '../types'
 import {
-  WindowsStartIcon,
   WinFileExplorerIcon,
   WinCvIcon,
   WinPhotosIcon,
-  WinNotepadIcon,
   WinEdgeIcon,
-  WinSettingsIcon,
-  WinRecycleBinIcon,
+  MobileSignalIcon,
+  MobileWifiIcon,
+  MobileBatteryIcon,
+  MobileBingIcon,
+  MobileCameraIcon,
+  MobileMicIcon,
+  MobilePhoneIcon,
+  MobileToDoIcon,
+  MobileOneDriveIcon,
+  WinMiniWordIcon,
+  WinMiniExcelIcon,
+  WinMiniPptIcon,
+  WinMiniOneNoteIcon,
+  MobileWeatherIcon,
 } from './WindowsIcons'
-
-function ChevronRightIcon({ size = 18, className }: { size?: number; className?: string }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" className={className} aria-hidden="true">
-      <path d="M9 18l6-6-6-6" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  )
-}
+import { X, ChevronRight, ExternalLink, FileText } from 'lucide-react'
 
 function MonitorIcon() {
   return (
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <rect x="2" y="3" width="20" height="14" rx="2" stroke="currentColor" strokeWidth="1.6" />
-      <path d="M8 21h8M12 17v4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <rect x="2" y="3" width="20" height="14" rx="2" stroke="currentColor" strokeWidth="1.8" />
+      <path d="M8 21h8M12 17v4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
     </svg>
   )
-}
-
-function UserIcon() {
-  return (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <circle cx="12" cy="8" r="4" stroke="currentColor" strokeWidth="1.6" />
-      <path d="M4 20c0-3.3 3.6-6 8-6s8 2.7 8 6" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
-    </svg>
-  )
-}
-
-
-const launcherHints: Partial<Record<AppId, string>> = {
-  members: 'Berkas & 12 Anggota Tim',
-  cvs: 'Dokumen CV ATS Tim',
-  memories: 'Galeri Foto Kegiatan',
-  welcome: 'Catatan Sambutan',
-  links: 'Tautan Resmi & Repo',
-  about: 'Tentang PROXY OS',
-  trash: 'Recycle Bin',
-}
-
-const getAppIcon = (id: AppId) => {
-  switch (id) {
-    case 'members':
-      return <WinFileExplorerIcon style={{ width: 34, height: 34 }} />
-    case 'cvs':
-      return <WinCvIcon style={{ width: 34, height: 34 }} />
-    case 'memories':
-      return <WinPhotosIcon style={{ width: 34, height: 34 }} />
-    case 'welcome':
-      return <WinNotepadIcon style={{ width: 34, height: 34 }} />
-    case 'links':
-      return <WinEdgeIcon style={{ width: 34, height: 34 }} />
-    case 'about':
-      return <WinSettingsIcon style={{ width: 34, height: 34 }} />
-    case 'trash':
-      return <WinRecycleBinIcon style={{ width: 34, height: 34 }} />
-    default:
-      return <WinFileExplorerIcon style={{ width: 34, height: 34 }} />
-  }
 }
 
 export function MobileHome({ onSwitchView }: { onSwitchView?: () => void }) {
   const [active, setActive] = useState<{ appId: AppId; payload?: WindowPayload } | null>(null)
-  const open = (appId: AppId, payload?: WindowPayload) => setActive({ appId, payload })
+  const [phoneModalOpen, setPhoneModalOpen] = useState(false)
+  const [microsoftModalOpen, setMicrosoftModalOpen] = useState(false)
+  const [searchQuery, setSearchQuery] = useState('')
+
+  // Live time and date matching mockup style
+  const [timeStr, setTimeStr] = useState(() => {
+    const d = new Date()
+    return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false })
+  })
+  const [dateStr, setDateStr] = useState(() => {
+    const d = new Date()
+    return d.toLocaleDateString('en-US', { weekday: 'long', day: 'numeric', month: 'long' })
+  })
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      const d = new Date()
+      setTimeStr(d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false }))
+      setDateStr(d.toLocaleDateString('en-US', { weekday: 'long', day: 'numeric', month: 'long' }))
+    }, 10000)
+    return () => clearInterval(timer)
+  }, [])
+
+  const open = (appId: AppId, payload?: WindowPayload) => {
+    setPhoneModalOpen(false)
+    setMicrosoftModalOpen(false)
+    setSearchQuery('')
+    setActive({ appId, payload })
+  }
+
+  // Filter members and apps for search
+  const searchResults = useMemo(() => {
+    const q = searchQuery.trim().toLowerCase()
+    if (!q) return null
+
+    const matchedMembers = members.filter(
+      (m) =>
+        m.name.toLowerCase().includes(q) ||
+        m.nickname.toLowerCase().includes(q) ||
+        (m.hometown && m.hometown.toLowerCase().includes(q)) ||
+        (m.role && m.role.toLowerCase().includes(q)) ||
+        (m.interests && m.interests.some((tag) => tag.toLowerCase().includes(q)))
+    )
+
+    const matchedApps = Object.entries(appRegistry).filter(
+      ([, app]) =>
+        app.label.toLowerCase().includes(q) ||
+        app.shortLabel.toLowerCase().includes(q)
+    )
+
+    return { members: matchedMembers, apps: matchedApps }
+  }, [searchQuery])
 
   if (active) {
-    const title = active.appId === 'profile' ? 'Profile' : active.appId === 'cv-viewer' ? 'CV Viewer' : active.appId in appRegistry ? appRegistry[active.appId as keyof typeof appRegistry].label : 'PROXY OS'
+    const title =
+      active.appId === 'profile'
+        ? 'Profile'
+        : active.appId === 'cv-viewer'
+        ? 'CV Viewer'
+        : active.appId in appRegistry
+        ? appRegistry[active.appId as keyof typeof appRegistry].label
+        : 'PROXY OS'
     return (
       <main id="main" className="mobile-app win11-mobile-app">
         <MobileHeader title={title} onHome={() => setActive(null)} />
         <div className="mobile-app-content win11-mobile-content">
-          <AppView appId={active.appId} payload={active.payload} onOpen={open} />
+          <AppView
+            appId={active.appId}
+            payload={active.payload}
+            onOpen={open}
+          />
         </div>
       </main>
     )
   }
 
   return (
-    <main id="main" className="mobile-home win11-mobile-home">
-      <header className="win11-mobile-topbar">
-        <div className="win11-mobile-brand">
-          <WindowsStartIcon style={{ width: 22, height: 22 }} />
-          <span>Windows 11 PROXY</span>
-        </div>
-        <div className="mobile-header-actions">
+    <main id="main" className="win11-mobile-launcher-container" aria-label="PROXY OS Mobile Launcher">
+      {/* 1. TOP STATUS BAR */}
+      <header className="win11-mobile-os-statusbar">
+        <div className="win11-mobile-status-time">{timeStr}</div>
+
+        <div className="win11-mobile-status-right">
           {onSwitchView && (
-            <button className="mobile-view-switch win11-view-switch-btn" onClick={onSwitchView} aria-pressed="false">
-              <MonitorIcon /> Mode Desktop
+            <button
+              className="win11-mobile-switch-desktop-btn"
+              onClick={onSwitchView}
+              title="Ganti ke Mode Desktop Windows 11"
+              aria-label="Mode Desktop"
+            >
+              <MonitorIcon />
+              <span>Desktop</span>
             </button>
           )}
-          <span className="mobile-status win11-status-pill">12 Anggota</span>
+
+          <div className="win11-mobile-status-icons" aria-label="Status Sinyal, Wi-Fi, dan Baterai">
+            <MobileSignalIcon color="#D4EDFF" />
+            <MobileWifiIcon color="#D4EDFF" />
+            <MobileBatteryIcon color="#D4EDFF" />
+          </div>
         </div>
       </header>
 
-      <section className="mobile-hero win11-mobile-hero">
-        <p>Pekan Ilkomerz 62 · Connect &amp; Deploy</p>
-        <h1>12 Anggota.<br />Satu Koneksi.</h1>
-        <span>Portofolio digital interaktif dalam balutan Windows 11 Fluent Design.</span>
-      </section>
-
-      <section className="mobile-launcher win11-mobile-launcher" aria-label="Aplikasi">
-        {desktopApps.map((id) => {
-          const app = appRegistry[id]
-          return (
-            <button key={id} onClick={() => open(id)} className="win11-mobile-tile">
-              <div className="win11-mobile-tile-icon">{getAppIcon(id)}</div>
-              <div className="win11-mobile-tile-text">
-                <strong>{app.label}</strong>
-                <small>{launcherHints[id] ?? 'Buka aplikasi'}</small>
-              </div>
-              <ChevronRightIcon size={18} className="win11-mobile-arrow" />
-            </button>
-          )
-        })}
-      </section>
-
-      <footer className="win11-mobile-footer">
-        <div className="win11-mobile-user">
-          <div className="win11-user-avatar"><UserIcon /></div>
-          <span>PROXY Group · Ilkomerz 62</span>
+      {/* 2. CLOCK, WEATHER & DATE WIDGET (Upper Center) */}
+      <section className="win11-mobile-clock-section" aria-label="Jam dan Cuaca">
+        <div className="win11-mobile-clock-row">
+          <span className="win11-mobile-big-time">{timeStr}</span>
+          <span className="win11-mobile-time-bullet" aria-hidden="true">•</span>
+          <div className="win11-mobile-weather-pill" title="Cuaca Saat Ini 27°C">
+            <MobileWeatherIcon size={28} />
+            <span className="win11-mobile-temp">27°</span>
+          </div>
         </div>
-        <p>Windows 11 Edition</p>
+        <p className="win11-mobile-date-text">{dateStr}</p>
+      </section>
+
+      {/* BOTTOM CLUSTER: APP GRID, SEARCH BAR, DOCK, HOME BAR */}
+      <div className="win11-mobile-bottom-section">
+        {/* 3. MAIN APP GRID (Row of 4 Icons) */}
+        <section className="win11-mobile-app-grid" aria-label="Aplikasi Utama">
+        {/* Phone App */}
+        <button
+          className="win11-mobile-app-tile"
+          onClick={() => setPhoneModalOpen(true)}
+          title="Buka Kontak & Panggilan 12 Anggota PROXY"
+          aria-label="Phone"
+        >
+          <div className="win11-mobile-tile-shadow">
+            <MobilePhoneIcon size={52} />
+          </div>
+          <span className="win11-mobile-tile-name">Phone</span>
+        </button>
+
+        {/* To Do App */}
+        <button
+          className="win11-mobile-app-tile"
+          onClick={() => open('welcome')}
+          title="Buka To Do / Catatan Sambutan PROXY"
+          aria-label="To Do"
+        >
+          <div className="win11-mobile-tile-shadow">
+            <MobileToDoIcon size={52} />
+          </div>
+          <span className="win11-mobile-tile-name">To Do</span>
+        </button>
+
+        {/* OneDrive App */}
+        <button
+          className="win11-mobile-app-tile"
+          onClick={() => open('members')}
+          title="Buka OneDrive / File Explorer Berkas Tim"
+          aria-label="OneDrive"
+        >
+          <div className="win11-mobile-tile-shadow">
+            <MobileOneDriveIcon size={52} />
+          </div>
+          <span className="win11-mobile-tile-name">OneDrive</span>
+        </button>
+
+        {/* Microsoft Folder */}
+        <button
+          className="win11-mobile-app-tile"
+          onClick={() => setMicrosoftModalOpen(true)}
+          title="Buka Folder Microsoft 365 PROXY"
+          aria-label="Microsoft Folder"
+        >
+          <div className="win11-mobile-folder-box">
+            <WinMiniWordIcon />
+            <WinMiniExcelIcon />
+            <WinMiniPptIcon />
+            <WinMiniOneNoteIcon />
+          </div>
+          <span className="win11-mobile-tile-name">Microsoft</span>
+        </button>
+      </section>
+
+      {/* 4. SEARCH BAR WIDGET & INDICATOR */}
+      <section className="win11-mobile-search-container" aria-label="Widget Pencarian">
+        <div className="win11-mobile-search-pill">
+          <div className="win11-mobile-search-icon" aria-hidden="true">
+            <MobileBingIcon />
+          </div>
+          <input
+            type="text"
+            className="win11-mobile-search-input"
+            placeholder="Search"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            aria-label="Pencarian OS"
+          />
+          {searchQuery && (
+            <button
+              className="win11-mobile-search-clear"
+              onClick={() => setSearchQuery('')}
+              aria-label="Hapus Pencarian"
+            >
+              <X size={14} />
+            </button>
+          )}
+          <div className="win11-mobile-search-actions">
+            <span className="win11-mobile-search-tool-btn" title="Visual Search / Kamera">
+              <MobileCameraIcon />
+            </span>
+            <span className="win11-mobile-search-tool-btn" title="Voice Search / Mikrofon">
+              <MobileMicIcon />
+            </span>
+          </div>
+        </div>
+
+        {/* Live Search Results Popover */}
+        {searchResults && (
+          <div className="win11-mobile-search-dropdown" role="region" aria-label="Hasil Pencarian">
+            <div className="win11-mobile-search-dropdown-header">
+              <span>Hasil Pencarian untuk &ldquo;{searchQuery}&rdquo;</span>
+              <button onClick={() => setSearchQuery('')} aria-label="Tutup Hasil Pencarian">
+                <X size={14} />
+              </button>
+            </div>
+
+            <div className="win11-mobile-search-results-list">
+              {/* Member Results */}
+              {searchResults.members.length > 0 && (
+                <div className="win11-mobile-search-group">
+                  <div className="win11-mobile-search-group-title">Anggota Tim ({searchResults.members.length})</div>
+                  {searchResults.members.map((m) => (
+                    <button
+                      key={m.id}
+                      className="win11-mobile-search-item"
+                      onClick={() => open('profile', { memberId: m.id })}
+                    >
+                      <div className="win11-mobile-search-avatar">
+                        <InitialPortrait member={m} />
+                      </div>
+                      <div className="win11-mobile-search-info">
+                        <strong>{m.name} ({m.nickname})</strong>
+                        <small>{m.hometown ? `${m.hometown} · ` : ''}{m.role || 'Anggota Tim'}</small>
+                      </div>
+                      <ChevronRight size={14} className="win11-mobile-search-arrow" />
+                    </button>
+                  ))}
+                </div>
+              )}
+
+              {/* App Results */}
+              {searchResults.apps.length > 0 && (
+                <div className="win11-mobile-search-group">
+                  <div className="win11-mobile-search-group-title">Aplikasi ({searchResults.apps.length})</div>
+                  {searchResults.apps.map(([id, app]) => (
+                    <button
+                      key={id}
+                      className="win11-mobile-search-item"
+                      onClick={() => open(id as AppId)}
+                    >
+                      <div className="win11-mobile-search-app-icon">
+                        {id === 'members' && <WinFileExplorerIcon style={{ width: 22, height: 22 }} />}
+                        {id === 'cvs' && <WinCvIcon style={{ width: 22, height: 22 }} />}
+                        {id === 'memories' && <WinPhotosIcon style={{ width: 22, height: 22 }} />}
+                        {id === 'welcome' && <WinMiniWordIcon />}
+                        {id === 'links' && <WinEdgeIcon style={{ width: 22, height: 22 }} />}
+                      </div>
+                      <div className="win11-mobile-search-info">
+                        <strong>{app.label}</strong>
+                        <small>{app.shortLabel || 'Aplikasi PROXY OS'}</small>
+                      </div>
+                      <ChevronRight size={14} className="win11-mobile-search-arrow" />
+                    </button>
+                  ))}
+                </div>
+              )}
+
+              {searchResults.members.length === 0 && searchResults.apps.length === 0 && (
+                <div className="win11-mobile-search-empty">
+                  Tidak ditemukan hasil untuk &ldquo;{searchQuery}&rdquo;.
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Small horizontal swipe indicator below search bar */}
+        <div className="win11-mobile-search-indicator" aria-hidden="true" />
+      </section>
+
+      {/* 5. BOTTOM DOCK (Row of 4 Favorite Apps) */}
+      <footer className="win11-mobile-dock" aria-label="Aplikasi Favorit Dock">
+        {/* Edge / Web Links */}
+        <button
+          className="win11-mobile-dock-icon"
+          onClick={() => open('links')}
+          title="Buka Microsoft Edge / Tautan Resmi & Repo"
+          aria-label="Microsoft Edge"
+        >
+          <WinEdgeIcon style={{ width: 48, height: 48 }} />
+        </button>
+
+        {/* Photos / Memories */}
+        <button
+          className="win11-mobile-dock-icon"
+          onClick={() => open('memories')}
+          title="Buka Photos / Galeri Foto Kenangan"
+          aria-label="Photos"
+        >
+          <WinPhotosIcon style={{ width: 48, height: 48 }} />
+        </button>
+
+        {/* File Explorer / Members */}
+        <button
+          className="win11-mobile-dock-icon"
+          onClick={() => open('members')}
+          title="Buka File Explorer / 12 Anggota Tim"
+          aria-label="File Explorer"
+        >
+          <WinFileExplorerIcon style={{ width: 48, height: 48 }} />
+        </button>
+
+        {/* CV ATS */}
+        <button
+          className="win11-mobile-dock-icon"
+          onClick={() => open('cvs')}
+          title="Buka Dokumen CV ATS Tim"
+          aria-label="CV Viewer"
+        >
+          <WinCvIcon style={{ width: 48, height: 48 }} />
+        </button>
       </footer>
+
+      {/* 6. BOTTOM HOME GESTURE BAR */}
+        <div className="win11-mobile-home-indicator" aria-hidden="true" />
+      </div>
+
+      {/* =========================================================================
+          MODAL 1: PHONE CONTACTS SHEET (12 ANGGOTA TIM)
+          ========================================================================= */}
+      {phoneModalOpen && (
+        <div className="win11-mobile-modal-overlay" onClick={() => setPhoneModalOpen(false)}>
+          <div
+            className="win11-mobile-modal-sheet"
+            onClick={(e) => e.stopPropagation()}
+            role="dialog"
+            aria-modal="true"
+            aria-label="Kontak Tim PROXY"
+          >
+            <div className="win11-mobile-modal-header">
+              <div className="win11-mobile-modal-title">
+                <MobilePhoneIcon size={24} />
+                <h3>Kontak &amp; Anggota Tim PROXY</h3>
+              </div>
+              <button
+                className="win11-mobile-modal-close"
+                onClick={() => setPhoneModalOpen(false)}
+                aria-label="Tutup"
+              >
+                <X size={18} />
+              </button>
+            </div>
+
+            <p className="win11-mobile-modal-subtitle">
+              Pekan Ilkomerz 62 · 12 Mahasiswa Ilmu Komputer IPB University
+            </p>
+
+            <div className="win11-mobile-contact-list">
+              {members.map((m: Member) => {
+                const igSocial = m.socials?.find((s) => s.label.toLowerCase() === 'instagram')
+                return (
+                  <div key={m.id} className="win11-mobile-contact-card">
+                    <div
+                      className="win11-mobile-contact-avatar"
+                      onClick={() => open('profile', { memberId: m.id })}
+                    >
+                      <InitialPortrait member={m} />
+                    </div>
+
+                    <div
+                      className="win11-mobile-contact-details"
+                      onClick={() => open('profile', { memberId: m.id })}
+                    >
+                      <div className="win11-mobile-contact-name-row">
+                        <strong>{m.name}</strong>
+                        {m.id === '01' && <span className="win11-mobile-pjk-badge">PJK</span>}
+                      </div>
+                      <small className="win11-mobile-contact-meta">
+                        {m.hometown ? `${m.hometown}` : 'IPB University'} · {m.nickname}
+                      </small>
+                    </div>
+
+                    <div className="win11-mobile-contact-actions">
+                      {igSocial?.url && (
+                        <a
+                          href={igSocial.url}
+                          target="_blank"
+                          rel="noreferrer noopener"
+                          className="win11-mobile-contact-ig-btn"
+                          title={`Kunjungi Instagram ${m.nickname}`}
+                        >
+                          <ExternalLink size={14} />
+                          <span>IG</span>
+                        </a>
+                      )}
+                      {m.cv && (
+                        <button
+                          className="win11-mobile-contact-cv-btn"
+                          onClick={() => open('cv-viewer', { memberId: m.id })}
+                          title="Lihat CV ATS"
+                        >
+                          <FileText size={14} />
+                          <span>CV</span>
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* =========================================================================
+          MODAL 2: MICROSOFT FOLDER MODAL
+          ========================================================================= */}
+      {microsoftModalOpen && (
+        <div className="win11-mobile-modal-overlay" onClick={() => setMicrosoftModalOpen(false)}>
+          <div
+            className="win11-mobile-folder-popup"
+            onClick={(e) => e.stopPropagation()}
+            role="dialog"
+            aria-modal="true"
+            aria-label="Microsoft Apps"
+          >
+            <div className="win11-mobile-folder-header">
+              <h3>Microsoft Apps</h3>
+              <button
+                className="win11-mobile-modal-close"
+                onClick={() => setMicrosoftModalOpen(false)}
+                aria-label="Tutup"
+              >
+                <X size={18} />
+              </button>
+            </div>
+
+            <div className="win11-mobile-folder-apps-grid">
+              {/* Word -> Welcome Notepad */}
+              <button className="win11-mobile-folder-app-btn" onClick={() => open('welcome')}>
+                <div className="win11-folder-app-icon-wrap">
+                  <WinMiniWordIcon />
+                </div>
+                <span>Word</span>
+                <small>Sambutan &amp; Notulen</small>
+              </button>
+
+              {/* Excel -> Members Database */}
+              <button className="win11-mobile-folder-app-btn" onClick={() => open('members')}>
+                <div className="win11-folder-app-icon-wrap">
+                  <WinMiniExcelIcon />
+                </div>
+                <span>Excel</span>
+                <small>Database Anggota</small>
+              </button>
+
+              {/* PowerPoint -> Memories */}
+              <button className="win11-mobile-folder-app-btn" onClick={() => open('memories')}>
+                <div className="win11-folder-app-icon-wrap">
+                  <WinMiniPptIcon />
+                </div>
+                <span>PowerPoint</span>
+                <small>Galeri Foto</small>
+              </button>
+
+              {/* OneNote -> CV ATS */}
+              <button className="win11-mobile-folder-app-btn" onClick={() => open('cvs')}>
+                <div className="win11-folder-app-icon-wrap">
+                  <WinMiniOneNoteIcon />
+                </div>
+                <span>OneNote</span>
+                <small>Dokumen CV ATS</small>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </main>
   )
 }

@@ -23,15 +23,18 @@ function SmartphoneIcon() {
   )
 }
 
+let hasAutoOpenedWelcome = false
 
 export function Desktop({ onSwitchView }: { onSwitchView?: () => void }) {
   const { state, openApp } = useWindows()
 
   useEffect(() => {
-    if (state.windows.length === 0) {
+    // Tampilkan Welcome.txt otomatis saat pertama kali membuka web
+    if (!hasAutoOpenedWelcome) {
+      hasAutoOpenedWelcome = true
       openApp('welcome')
     }
-  }, [openApp, state.windows.length])
+  }, [openApp])
 
   const desktopShortcuts = [
     { id: 'members' as const, label: 'This PC', icon: <WinFileExplorerIcon style={{ width: 44, height: 44 }} /> },
@@ -66,7 +69,11 @@ export function Desktop({ onSwitchView }: { onSwitchView?: () => void }) {
       {/* Render open Windows */}
       {state.windows.map((item) => (
         <WindowFrame key={item.id} window={item}>
-          <AppView appId={item.appId} payload={item.payload} onOpen={openApp} />
+          <AppView
+            appId={item.appId}
+            payload={item.payload}
+            onOpen={openApp}
+          />
         </WindowFrame>
       ))}
 

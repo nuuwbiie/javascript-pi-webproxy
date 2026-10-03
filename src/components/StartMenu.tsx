@@ -106,16 +106,18 @@ export function StartMenu({ isOpen, onClose, onOpenApp }: StartMenuProps) {
     { id: 'welcome', name: 'Notepad', icon: <WinNotepadIcon />, appId: 'welcome' },
     { id: 'about', name: 'Settings', icon: <WinSettingsIcon />, appId: 'about' },
     { id: 'team', name: 'Anggota Tim (12)', icon: <WinTeamIcon />, appId: 'members' },
-    { id: 'pjk', name: 'PJK Kelompok', icon: <WinTeamIcon />, appId: 'profile', payload: { memberId: '01' } },
-    { id: 'm02', name: 'Anggota 02', icon: <WinTeamIcon />, appId: 'profile', payload: { memberId: '02' } },
-    { id: 'm03', name: 'Anggota 03', icon: <WinTeamIcon />, appId: 'profile', payload: { memberId: '03' } },
-    { id: 'm04', name: 'Anggota 04', icon: <WinTeamIcon />, appId: 'profile', payload: { memberId: '04' } },
+    { id: 'pjk', name: 'Apta (PJK)', icon: <WinTeamIcon />, appId: 'profile', payload: { memberId: '01' } },
+    { id: 'm02', name: 'Alarick (Anggota 02)', icon: <WinTeamIcon />, appId: 'profile', payload: { memberId: '02' } },
+    { id: 'm03', name: 'Pasha (Anggota 03)', icon: <WinTeamIcon />, appId: 'profile', payload: { memberId: '03' } },
+    { id: 'm04', name: 'Rafi (Anggota 04)', icon: <WinTeamIcon />, appId: 'profile', payload: { memberId: '04' } },
     { id: 'm05', name: 'Anggota 05', icon: <WinTeamIcon />, appId: 'profile', payload: { memberId: '05' } },
-    { id: 'm06', name: 'Anggota 06', icon: <WinTeamIcon />, appId: 'profile', payload: { memberId: '06' } },
-    { id: 'm07', name: 'Anggota 07', icon: <WinTeamIcon />, appId: 'profile', payload: { memberId: '07' } },
-    { id: 'm08', name: 'Anggota 08', icon: <WinTeamIcon />, appId: 'profile', payload: { memberId: '08' } },
-    { id: 'm09', name: 'Anggota 09', icon: <WinTeamIcon />, appId: 'profile', payload: { memberId: '09' } },
+    { id: 'm06', name: 'Athena (Anggota 06)', icon: <WinTeamIcon />, appId: 'profile', payload: { memberId: '06' } },
+    { id: 'm07', name: 'Rafha (Anggota 07)', icon: <WinTeamIcon />, appId: 'profile', payload: { memberId: '07' } },
+    { id: 'm08', name: 'Anggito (Anggota 08)', icon: <WinTeamIcon />, appId: 'profile', payload: { memberId: '08' } },
+    { id: 'm09', name: 'Naura (Anggota 09)', icon: <WinTeamIcon />, appId: 'profile', payload: { memberId: '09' } },
     { id: 'm10', name: 'Anggota 10', icon: <WinTeamIcon />, appId: 'profile', payload: { memberId: '10' } },
+    { id: 'm11', name: 'Ibnu (Anggota 11)', icon: <WinTeamIcon />, appId: 'profile', payload: { memberId: '11' } },
+    { id: 'm12', name: 'Irsya (Anggota 12)', icon: <WinTeamIcon />, appId: 'profile', payload: { memberId: '12' } },
     { id: 'trash', name: 'Recycle Bin', icon: <WinRecycleBinIcon />, appId: 'trash' },
   ], [])
 
@@ -234,27 +236,27 @@ export function StartMenu({ isOpen, onClose, onOpenApp }: StartMenuProps) {
             <button
               className="win11-rec-item"
               onClick={() => {
-                onOpenApp('profile', { memberId: '01' })
+                onOpenApp('profile', { memberId: '02' })
                 onClose()
               }}
             >
               <div className="win11-rec-icon"><WinTeamIcon /></div>
               <div className="win11-rec-info">
-                <strong>PJK Kelompok</strong>
-                <small>Profil Penanggung Jawab Kelompok · 2h ago</small>
+                <strong>Muhammad Alarick Irham</strong>
+                <small>Profil Anggota 02 · 2h ago</small>
               </div>
             </button>
 
             <button
               className="win11-rec-item"
               onClick={() => {
-                onOpenApp('cv-viewer', { memberId: '01' })
+                onOpenApp('cv-viewer', { memberId: '02' })
                 onClose()
               }}
             >
               <div className="win11-rec-icon"><WinCvIcon /></div>
               <div className="win11-rec-info">
-                <strong>pjk-kelompok_cv.pdf</strong>
+                <strong>alarick_cv.pdf</strong>
                 <small>Dokumen ATS · Yesterday at 4:24 PM</small>
               </div>
             </button>
