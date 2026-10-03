@@ -59,9 +59,9 @@ export function Taskbar() {
       case 'welcome':
         return <WinNotepadIcon />
       case 'links':
-        return <WinEdgeIcon />
+        return <WinEdgeIcon style={{ width: 24, height: 24 }} />
       case 'about':
-        return <WinSettingsIcon />
+        return <WinSettingsIcon style={{ width: 24, height: 24 }} />
       case 'trash':
         return <WinRecycleBinIcon />
       default:
@@ -72,7 +72,7 @@ export function Taskbar() {
   // Pinned items on the Windows 11 taskbar
   const pinnedItems: { id: AppId; name: string; icon: JSX.Element }[] = [
     { id: 'members', name: 'File Explorer', icon: <WinFileExplorerIcon /> },
-    { id: 'links', name: 'Microsoft Edge', icon: <WinEdgeIcon /> },
+    { id: 'links', name: 'Microsoft Edge', icon: <WinEdgeIcon style={{ width: 24, height: 24 }} /> },
     { id: 'memories', name: 'Photos', icon: <WinPhotosIcon /> },
     { id: 'cvs', name: 'CV Viewer', icon: <WinCvIcon /> },
     { id: 'welcome', name: 'Notepad', icon: <WinNotepadIcon /> },

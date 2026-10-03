@@ -168,19 +168,7 @@ export function WinFileExplorerIcon(props: SVGProps<SVGSVGElement>) {
 export function WinEdgeIcon(props: SVGProps<SVGSVGElement>) {
   return (
     <svg viewBox="0 0 32 32" width="30" height="30" fill="none" {...props}>
-      <defs>
-        <radialGradient id="edge-grad1" cx="30%" cy="20%" r="70%">
-          <stop offset="0%" stopColor="#35C1F1" />
-          <stop offset="100%" stopColor="#087AD6" />
-        </radialGradient>
-        <linearGradient id="edge-grad2" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stopColor="#00E19E" />
-          <stop offset="100%" stopColor="#087AD6" />
-        </linearGradient>
-      </defs>
-      <circle cx="16" cy="16" r="13" fill="url(#edge-grad1)" />
-      <path d="M16 6a10 10 0 108.5 15.3c-.8.1-1.5-.5-1.5-1.3 0-.6.4-1.2 1-1.4A7 7 0 1116 9c1.5 0 3.3.4 4.5 1.5.6.5 1.5.2 1.5-.6C22 7.7 19.3 6 16 6z" fill="url(#edge-grad2)" opacity="0.9" />
-      <circle cx="17" cy="15" r="4.5" fill="#ffffff" opacity="0.3" />
+      <image href="/icons/microsoft-edge.png" width="32" height="32" preserveAspectRatio="xMidYMid meet" />
     </svg>
   )
 }
@@ -198,8 +186,7 @@ export function WinStoreIcon(props: SVGProps<SVGSVGElement>) {
 export function WinSettingsIcon(props: SVGProps<SVGSVGElement>) {
   return (
     <svg viewBox="0 0 32 32" width="30" height="30" fill="none" {...props}>
-      <circle cx="16" cy="16" r="13" fill="#6B7280" />
-      <path d="M16 11a5 5 0 100 10 5 5 0 000-10zm-7 5a7 7 0 011.1-3.7l-1.3-1.3 2-2 1.3 1.3A7 7 0 0116 9v-2h2.8v2a7 7 0 013.7 1.1l1.3-1.3 2 2-1.3 1.3A7 7 0 0125.6 16h2v2.8h-2a7 7 0 01-1.1 3.7l1.3 1.3-2 2-1.3-1.3A7 7 0 0118.8 25.6v2H16v-2a7 7 0 01-3.7-1.1l-1.3 1.3-2-2 1.3-1.3A7 7 0 019 18.8h-2V16h2z" fill="#E5E7EB" />
+      <image href="/icons/settings.png" width="32" height="32" preserveAspectRatio="xMidYMid meet" />
     </svg>
   )
 }
