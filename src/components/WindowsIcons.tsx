@@ -234,8 +234,7 @@ export function WinStoreIcon(props: SVGProps<SVGSVGElement>) {
 export function WinSettingsIcon(props: SVGProps<SVGSVGElement>) {
   return (
     <svg viewBox="0 0 32 32" width="30" height="30" fill="none" {...props}>
-      <circle cx="16" cy="16" r="13" fill="#6B7280" />
-      <path d="M16 11a5 5 0 100 10 5 5 0 000-10zm-7 5a7 7 0 011.1-3.7l-1.3-1.3 2-2 1.3 1.3A7 7 0 0116 9v-2h2.8v2a7 7 0 013.7 1.1l1.3-1.3 2 2-1.3 1.3A7 7 0 0125.6 16h2v2.8h-2a7 7 0 01-1.1 3.7l1.3 1.3-2 2-1.3-1.3A7 7 0 0118.8 25.6v2H16v-2a7 7 0 01-3.7-1.1l-1.3 1.3-2-2 1.3-1.3A7 7 0 019 18.8h-2V16h2z" fill="#E5E7EB" />
+      <image href="/icons/settings.svg" width="32" height="32" preserveAspectRatio="xMidYMid meet" />
     </svg>
   )
 }
@@ -243,16 +242,7 @@ export function WinSettingsIcon(props: SVGProps<SVGSVGElement>) {
 export function WinPhotosIcon(props: SVGProps<SVGSVGElement>) {
   return (
     <svg viewBox="0 0 32 32" width="30" height="30" fill="none" {...props}>
-      <defs>
-        <linearGradient id="photos-bg" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stopColor="#4FC3F7" />
-          <stop offset="100%" stopColor="#0288D1" />
-        </linearGradient>
-      </defs>
-      <rect x="4" y="5" width="24" height="22" rx="4" fill="url(#photos-bg)" />
-      <circle cx="11" cy="12" r="2.8" fill="#FFF9C4" />
-      <path d="M5 24l6.5-7.5 4 4.5 4-5.5 7.5 8.5H5z" fill="#ffffff" opacity="0.9" />
-      <path d="M11.5 21l3.5-4 5 7H11.5z" fill="#E0F7FA" opacity="0.6" />
+      <image href="/icons/photos.png" width="32" height="32" preserveAspectRatio="xMidYMid meet" />
     </svg>
   )
 }
