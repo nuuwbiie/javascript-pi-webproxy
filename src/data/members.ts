@@ -19,8 +19,8 @@ export const members: Member[] = [
       { label: 'LinkedIn' },
       { label: 'GitHub' },
     ],
-    photo: undefined,
-    cv: undefined,
+    photo: '/members/apta.jpg',
+    cv: '/cvs/apta.pdf',
     isPlaceholder: false,
   },
   {
