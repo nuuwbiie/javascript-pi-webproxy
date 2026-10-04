@@ -1754,18 +1754,30 @@ button:disabled {
   display: flex;
   flex-direction: column;
   height: 100%;
+  min-height: 0;
   background: #ffffff;
 }
 .win11-photos-tabs {
   display: flex;
+  flex: 0 0 auto;
+  align-items: center;
   gap: 4px;
-  padding: 8px 16px;
+  padding: 4px 12px;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
   background: #fbfbfb;
   border-bottom: 1px solid var(--win-border);
 }
+.win11-photos-tabs::-webkit-scrollbar {
+  display: none;
+}
 .win11-tab-btn {
+  flex: 0 0 auto;
+  min-height: 44px;
   padding: 6px 14px;
   font-size: 0.76rem;
+  white-space: nowrap;
   border-radius: 4px;
   color: var(--win-text-sec);
   transition: all 120ms ease;
@@ -1782,18 +1794,26 @@ button:disabled {
 
 .win11-photos-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 180px), 1fr));
+  align-content: start;
   gap: 10px;
   padding: 16px;
   overflow-y: auto;
   flex: 1;
+  min-height: 0;
 }
 .win11-photo-tile {
   position: relative;
+  display: block;
+  min-width: 0;
+  width: 100%;
+  height: auto;
+  padding: 0;
   aspect-ratio: 1.25;
   border-radius: 6px;
   overflow: hidden;
   border: 1px solid var(--win-border);
+  background: #f1f4f7;
   transition: transform 180ms ease, box-shadow 180ms ease;
 }
 .win11-photo-tile:hover {
@@ -1801,6 +1821,9 @@ button:disabled {
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
 }
 .win11-photo-tile img {
+  position: absolute;
+  inset: 0;
+  display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -2730,6 +2753,7 @@ button:disabled {
 }
 .win11-mobile-content {
   flex: 1;
+  min-height: 0;
   overflow-y: auto;
 }
 
@@ -2761,5 +2785,129 @@ button:disabled {
   }
   .win11-recommended-grid {
     grid-template-columns: 1fr;
+  }
+}
+
+
+@media (max-width: 767px) {
+  .win11-photos-app {
+    height: 100%;
+    min-height: 0;
+  }
+
+  .win11-photos-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+    padding: 12px;
+  }
+
+  .win11-photo-tile {
+    aspect-ratio: 4 / 3;
+  }
+
+  .win11-photo-caption {
+    gap: 4px;
+    padding: 8px;
+    font-size: 0.68rem;
+  }
+
+  .win11-photo-caption span {
+    min-width: 0;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+
+  .win11-lightbox {
+    grid-template-columns: 44px minmax(0, 1fr) 44px;
+    gap: 4px;
+    padding: 12px;
+  }
+
+  .win11-lightbox-figure {
+    min-width: 0;
+    width: 100%;
+    max-height: 82dvh;
+  }
+
+  .win11-lightbox-figure img {
+    width: 100%;
+    max-width: 100%;
+    max-height: 64dvh;
+  }
+
+  .win11-lightbox-info {
+    padding: 12px 14px;
+  }
+
+  .win11-lightbox-info h3 {
+    font-size: 1rem;
+  }
+
+  .win11-lightbox-info p {
+    font-size: 0.78rem;
+  }
+}
+
+
+@media (max-width: 767px) {
+  .win11-taskbar {
+    height: 56px;
+    padding: 0 8px;
+    gap: 4px;
+  }
+
+  .win11-taskbar-center {
+    position: relative;
+    left: auto;
+    transform: none;
+    flex: 1 1 auto;
+    min-width: 0;
+    justify-content: flex-start;
+    gap: 2px;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scrollbar-width: none;
+  }
+
+  .win11-taskbar-center::-webkit-scrollbar {
+    display: none;
+  }
+
+  .win11-taskbar-mobile-hide {
+    display: none;
+  }
+
+  .win11-taskbar-icon {
+    flex: 0 0 38px;
+    width: 38px;
+    height: 42px;
+  }
+
+  .win11-taskbar-right {
+    flex: 0 0 auto;
+    gap: 0;
+  }
+
+  .win11-tray-btn,
+  .win11-show-desktop {
+    display: none;
+  }
+
+  .win11-clock-btn {
+    min-width: 62px;
+    height: 42px;
+    padding: 0 4px;
+  }
+
+  .win11-clock-time {
+    font-size: 0.67rem;
+    white-space: nowrap;
+  }
+
+  .win11-clock-date {
+    font-size: 0.58rem;
+    white-space: nowrap;
   }
 }

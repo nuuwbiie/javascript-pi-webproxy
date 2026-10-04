@@ -132,7 +132,7 @@ export function Taskbar() {
 
           {/* Search Icon Button from user's SVG */}
           <button
-            className="win11-taskbar-icon win11-search-btn"
+            className="win11-taskbar-icon win11-search-btn win11-taskbar-mobile-hide"
             onClick={() => {
               setStartOpen(true)
               setQuickSettingsOpen(false)
@@ -145,7 +145,7 @@ export function Taskbar() {
 
           {/* Task View from user's SVG */}
           <button
-            className="win11-taskbar-icon"
+            className="win11-taskbar-icon win11-taskbar-mobile-hide"
             onClick={() => openApp('members')}
             title="Task View"
             aria-label="Task View"
@@ -155,7 +155,7 @@ export function Taskbar() {
 
           {/* Teams / Chat Icon from user's SVG */}
           <button
-            className="win11-taskbar-icon"
+            className="win11-taskbar-icon win11-taskbar-mobile-hide"
             onClick={() => openApp('about')}
             title="Chat / Teams"
             aria-label="Chat"
