@@ -1,9 +1,5 @@
 import type { Member } from '../types'
 
-const rawMembers: [string, string, string, string, string, string[], string?, string?, string?][] = [
-  ['05', 'Ahmad Fikri Rizqullah Alim', 'Fikri', 'Mahasiswa Ilmu Komputer 62', 'Informasi profil lainnya belum ditambahkan.', [], '27 Oktober 2006', 'Jakarta Timur', 'https://instagram.com/frizqullah27'],
-]
-
 export const members: Member[] = [
   {
     id: '01',
@@ -93,6 +89,30 @@ export const members: Member[] = [
     ],
     photo: '/members/rafi.jpg',
     cv: '/cvs/rafi.pdf',
+    isPlaceholder: false,
+  },
+  {
+    id: '05',
+    name: 'Ahmad Fikri Rizqullah Alim',
+    nickname: 'Fikri',
+    role: 'Mahasiswa Ilmu Komputer 62',
+    birthDate: '27 Oktober 2006',
+    hometown: 'Jakarta Timur',
+    bio: 'Mahasiswa Ilmu Komputer IPB University angkatan 2025 dengan minat di web development dan teknologi informasi. Peraih Bronze Medal International Kangaroo Mathematics Contest 2025 dengan pengalaman organisasi sebagai Sekretaris OSIS dan Mudabbir, serta mengerjakan proyek web seperti personal webpage, donation calculator, dan to-do list.',
+    interests: [
+      'Web Development',
+      'Python',
+      'C / C++',
+      'Problem Solving',
+      'Teamwork',
+    ],
+    socials: [
+      { label: 'Instagram', url: 'https://instagram.com/frizqullah27' },
+      { label: 'LinkedIn' },
+      { label: 'GitHub' },
+    ],
+    photo: '/members/anggota05.jpg',
+    cv: '/cvs/fikri.pdf',
     isPlaceholder: false,
   },
   {
@@ -263,19 +283,6 @@ export const members: Member[] = [
     cv: '/cvs/irsya.pdf',
     isPlaceholder: false,
   },
-  ...rawMembers.map(([id, name, nickname, role, bio, interests, birthDate, hometown, instagram]) => ({
-    id,
-    name,
-    nickname,
-    role,
-    bio,
-    interests,
-    birthDate,
-    hometown,
-    socials: [{ label: 'Instagram', url: instagram }, { label: 'LinkedIn' }, { label: 'GitHub' }],
-    photo: id === '05' ? '/members/anggota05.jpg' : undefined,
-    isPlaceholder: true,
-  })),
 ].sort((a, b) => a.id.localeCompare(b.id))
 
 export const getMember = (id?: string): Member => members.find((member) => member.id === id) ?? members[0]!
