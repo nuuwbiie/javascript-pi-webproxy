@@ -2,7 +2,6 @@ import type { Member } from '../types'
 
 const rawMembers: [string, string, string, string, string, string[]][] = [
   ['05', 'Nama Anggota 05', 'Anggota 05', 'Mahasiswa Ilmu Komputer 62', 'Mendukung pengujian fungsionalitas dan integrasi komponen aplikasi desktop.', ['Quality Assurance', 'Testing', 'Kode']],
-  ['10', 'Nama Anggota 10', 'Anggota 10', 'Mahasiswa Ilmu Komputer 62', 'Manajemen aset statis, pengarsipan berkas, dan kurasi foto kenangan.', ['Media Archiving', 'Kurasi', 'Kreatif']],
 ]
 
 export const members: Member[] = [
@@ -92,7 +91,7 @@ export const members: Member[] = [
       { label: 'LinkedIn', url: 'https://www.linkedin.com/in/rafialarifi' },
       { label: 'GitHub', url: 'https://github.com/itsrafftech' },
     ],
-    photo: undefined,
+    photo: '/members/rafi.jpg',
     cv: '/cvs/rafi.pdf',
     isPlaceholder: false,
   },
@@ -193,6 +192,30 @@ export const members: Member[] = [
     isPlaceholder: false,
   },
   {
+    id: '10',
+    name: 'Aziz Putra Sadhevi',
+    nickname: 'Aziz',
+    role: 'Mahasiswa Ilmu Komputer 62',
+    birthDate: '1 September 2006',
+    hometown: 'Kota Bengkulu',
+    bio: 'Mahasiswa Ilmu Komputer IPB University dengan rekam jejak kepemimpinan, riset, analisis data, dan manajemen acara berskala besar. Berpengalaman dalam pengembangan organisasi dan koordinasi pemangku kepentingan, serta pernah menjabat sebagai Sekretaris Litbang Forum OSIS Nasional dan Ketua Cendana Fair.',
+    interests: [
+      'Data Analysis',
+      'Research & Development',
+      'Event Management',
+      'Public Speaking',
+      'Leadership',
+    ],
+    socials: [
+      { label: 'Instagram', url: 'https://instagram.com/azizputra__' },
+      { label: 'LinkedIn', url: 'https://www.linkedin.com/in/AzizPutraSadhevi' },
+      { label: 'GitHub' },
+    ],
+    photo: '/members/aziz.jpg',
+    cv: '/cvs/aziz.pdf',
+    isPlaceholder: false,
+  },
+  {
     id: '11',
     name: 'Ibnu Rizqi Indra Daniswara',
     nickname: 'Ibnu',
@@ -250,6 +273,7 @@ export const members: Member[] = [
     birthDate: undefined,
     hometown: undefined,
     socials: [{ label: 'Instagram' }, { label: 'LinkedIn' }, { label: 'GitHub' }],
+    photo: id === '05' ? '/members/anggota05.jpg' : undefined,
     isPlaceholder: true,
   })),
 ].sort((a, b) => a.id.localeCompare(b.id))

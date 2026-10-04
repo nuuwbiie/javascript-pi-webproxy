@@ -39,8 +39,8 @@ export function Taskbar() {
 
   const dateString = useMemo(() => {
     return new Intl.DateTimeFormat('en-US', {
-      month: 'numeric',
-      day: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
       year: 'numeric',
     }).format(now)
   }, [now])
@@ -59,9 +59,9 @@ export function Taskbar() {
       case 'welcome':
         return <WinNotepadIcon />
       case 'links':
-        return <WinEdgeIcon style={{ width: 24, height: 24 }} />
+        return <WinEdgeIcon />
       case 'about':
-        return <WinSettingsIcon style={{ width: 24, height: 24 }} />
+        return <WinSettingsIcon />
       case 'trash':
         return <WinRecycleBinIcon />
       default:
@@ -72,7 +72,7 @@ export function Taskbar() {
   // Pinned items on the Windows 11 taskbar
   const pinnedItems: { id: AppId; name: string; icon: JSX.Element }[] = [
     { id: 'members', name: 'File Explorer', icon: <WinFileExplorerIcon /> },
-    { id: 'links', name: 'Microsoft Edge', icon: <WinEdgeIcon style={{ width: 24, height: 24 }} /> },
+    { id: 'links', name: 'Microsoft Edge', icon: <WinEdgeIcon /> },
     { id: 'memories', name: 'Photos', icon: <WinPhotosIcon /> },
     { id: 'cvs', name: 'CV Viewer', icon: <WinCvIcon /> },
     { id: 'welcome', name: 'Notepad', icon: <WinNotepadIcon /> },
@@ -98,25 +98,25 @@ export function Taskbar() {
       />
 
       <footer className="win11-taskbar" aria-label="Taskbar Windows 11">
-        {/* Left side: Weather widget capsule using official Windows 11 SVG sun */}
+        {/* Left side: Weather widget capsule with Sun & Cloud from user's SVG */}
         <div className="win11-taskbar-left">
           <button
             className="win11-weather-widget"
-            title="Cuaca: 24°C Cerah"
-            aria-label="Informasi cuaca"
+            title="28°C Partly Sunny"
+            aria-label="Informasi cuaca: 28°C Partly Sunny"
             onClick={() => openApp('about')}
           >
             <WinWeatherSunIcon />
             <div className="win11-weather-text">
-              <span className="win11-weather-temp">24°C</span>
-              <span className="win11-weather-desc">Sunny</span>
+              <span className="win11-weather-temp">28°C</span>
+              <span className="win11-weather-desc">Partly Sunny</span>
             </div>
           </button>
         </div>
 
         {/* Center: Windows 11 Centered App Icons */}
         <div className="win11-taskbar-center">
-          {/* Windows Start Button with official gradient */}
+          {/* Windows Start Button with official gradient from SVG */}
           <button
             className={`win11-taskbar-icon win11-start-btn ${startOpen ? 'is-active' : ''}`}
             onClick={() => {
@@ -130,9 +130,9 @@ export function Taskbar() {
             <WindowsStartIcon />
           </button>
 
-          {/* Search Capsule Pill with official SVG search icon */}
+          {/* Search Icon Button from user's SVG */}
           <button
-            className="win11-search-pill"
+            className="win11-taskbar-icon win11-search-btn"
             onClick={() => {
               setStartOpen(true)
               setQuickSettingsOpen(false)
@@ -141,10 +141,9 @@ export function Taskbar() {
             aria-label="Search"
           >
             <WinSearchIcon />
-            <span>Search</span>
           </button>
 
-          {/* Task View */}
+          {/* Task View from user's SVG */}
           <button
             className="win11-taskbar-icon"
             onClick={() => openApp('members')}
@@ -154,7 +153,7 @@ export function Taskbar() {
             <WinTaskViewIcon />
           </button>
 
-          {/* Teams / Chat Icon from Windows 11 SVG */}
+          {/* Teams / Chat Icon from user's SVG */}
           <button
             className="win11-taskbar-icon"
             onClick={() => openApp('about')}

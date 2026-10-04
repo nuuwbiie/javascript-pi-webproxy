@@ -57,13 +57,13 @@ Dokumen ini merangkum seluruh tahapan diskusi, konfigurasi sistem, solusi kode, 
 | **01** | Apta Adi Nur Fiansah (PJK) | Apta | Jakarta Barat | 5 Juni 2005 | *Pending* (Inisial aktif) | *Pending* (Fallback aktif) |
 | **02** | Muhammad Alarick Irham | Alarick | Jakarta Timur | 22 Juni 2007 | Lengkap (`alarick.jpg`) | Lengkap (`alarick.pdf`) |
 | **03** | Pasha Haris Akhir | Pasha | Jakarta Selatan | 11 Agustus 2007 | Lengkap (`pasha.jpg`) | Lengkap (`pasha.pdf`) |
-| **04** | Muhammad Rafi Al Arifi | Rafi | Bogor | 22 Desember 2006 | *Pending* (Inisial aktif) | Lengkap (`rafi.pdf`) |
-| **05** | *Belum Diisi* | - | - | - | Placeholder | Placeholder |
+| **04** | Muhammad Rafi Al Arifi | Rafi | Bogor | 22 Desember 2006 | Lengkap (`rafi.jpg`) | Lengkap (`rafi.pdf`) |
+| **05** | *Menunggu Biodata* | - | - | - | Lengkap (`anggota05.jpg`) | ⏳ *Pending* |
 | **06** | Athena Lovelyta Jasmine | Athena | Kota Bogor | 11 Desember 2006 | Lengkap (`athena.jpg`) | Lengkap (`athena.pdf`) |
 | **07** | Auffa Rafha Pradana | Rafha | Jakarta Selatan | 16 September 2006 | Lengkap (`auffa.jpg`) | Lengkap (`auffa.pdf`) |
 | **08** | Anggito Abimanyu | Anggito | Kota Bekasi | 11 April 2007 | Lengkap (`anggito.jpg`) | Lengkap (`anggito.pdf`) |
 | **09** | Naura Dwi Khalisya | Naura | Serang | 5 Desember 2006 | Lengkap (`naura.jpg`) | Lengkap (`naura.pdf`) |
-| **10** | *Belum Diisi* | - | - | - | Placeholder | Placeholder |
+| **10** | Aziz Putra Sadhevi | Aziz | Kota Bengkulu | 1 September 2006 | Lengkap (`aziz.jpg`) | Lengkap (`aziz.pdf`) |
 | **11** | Ibnu Rizqi Indra Daniswara | Ibnu | Depok | 23 April 2007 | Lengkap (`ibnu.jpg`) | Lengkap (`ibnu.pdf`) |
 | **12** | Muhammad Irsya Zaelani | Irsya | Tangerang | 20 Maret 2007 | Lengkap (`irsya.jpg` - Resmi) | Lengkap (`irsya.pdf`) |
 
@@ -72,11 +72,9 @@ Dokumen ini merangkum seluruh tahapan diskusi, konfigurasi sistem, solusi kode, 
 ## 4. Item yang Masih Tertunda (Pending Tasks)
 
 1. **Pengisian Data Anggota yang Belum Masuk**:
-   - Anggota 05
-   - Anggota 10
+   - Anggota 05 (Tinggal 1 anggota lagi menuju 12 anggota penuh)
 2. **Kelengkapan Berkas Susulan**:
    - **Anggota 01 (Apta Adi Nur Fiansah)**: Foto profil & berkas PDF CV ATS.
-   - **Anggota 04 (Muhammad Rafi Al Arifi)**: Foto profil resmi/kasual.
 3. **Penyelarasan Akhir**:
    - Menghapus entri `rawMembers` sepenuhnya setelah seluruh 12 anggota terisi.
    - Verifikasi akhir tautan sosial media dan tampilan cetak CV PDF di production.
@@ -145,7 +143,31 @@ Berdasarkan rancangan SVG interaktif (`mobile_design.svg`, resolusi standar `360
    - Penutupan berkas dikontrol secara eksklusif oleh tombol caption **'X' merah** standar pada Window Frame ([src/components/WindowFrame.tsx](file:///C:/Users/Pasha/Downloads/javascript-pi-webproxy-main/javascript-pi-webproxy-main/src/components/WindowFrame.tsx)):
      - Menjalankan action `close(item.id)` dari `WindowContext`.
      - Memiliki styling hover merah khas Windows 11 (`.win11-caption-btn.win11-close:hover` dengan latar belakang `#e81123 !important` dan teks/ikon putih).
-     - Menutup jendela seketika dan bersih tanpa adanya loop buka-kembali.
+     - Menutup jendela seketika dan bersih tanpa adanya loop buka-kembali.---
 
+## 7. Penyelarasan Taskbar Bawah Sesuai Desain Vektor SVG (Windows 11)
 
+Berdasarkan berkas spesifikasi SVG (`width="1920" height="60" viewBox="0 0 1920 60"`), bilah bawah (Taskbar) telah disesuaikan secara presisi:
+
+### Perubahan & Spesifikasi:
+1. **Dimensi & Latar Belakang Acrylic**:
+   - Tinggi taskbar ditetapkan menjadi `60px` dengan warna latar belakang akrilik `#CAD4E7` (`rgba(202, 212, 231, 0.94)` dan `backdrop-filter: blur(30px)`).
+   - Penyesuaian batas jendela maksimal (`inset: 0 0 60px 0`), posisi Start Menu (`bottom: 68px`), Quick Settings (`bottom: 68px`), dan watermark desktop (`bottom: 72px`).
+
+2. **Sisi Kiri (Weather Widget)**:
+   - Menggunakan vektor Sun + Cloud langsung dari SVG.
+   - Menampilkan teks cuaca presisi: Suhu `28°C` dan deskripsi `"Partly Sunny"` dengan teks gelap kontras `#000000`.
+
+3. **Sisi Tengah (Center App Icons & Brand Gradients)**:
+   - **Start Button**: Mengadopsi gradien linier resmi 3-stop Windows 11 (`#8AECF6` -> `#24B8E7` -> `#3774C4`).
+   - **Search Button**: Diubah dari bentuk capsule pill teks menjadi tombol ikon kaca pembesar murni (`#1F1F1F`) sesuai SVG.
+   - **Task View**: Menampilkan dua persegi bertumpuk (persegi belakang bergradien gelap dan persegi depan putih transparan `0.6`).
+   - **Teams / Chat**: Gelembung percakapan ungu gradien dengan kamera video putih terpusat.
+   - **File Explorer**: Folder bergradien kuning hangat dengan aksen base bawah biru `#036ABB`.
+   - **Microsoft Edge**: Swirl ombak bergradien multi-stop radial dan linier.
+
+4. **Sisi Kanan (System Tray & Live Clock)**:
+   - Ikon Chevron (`^`) tombol *Show hidden icons*.
+   - Cluster pengaturan cepat: Sinyal Wi-Fi 4-lengkung, ikon speaker volume dengan 2 gelombang suara, dan kapsul baterai horizontal.
+   - Jam digital live dengan format `hh:mm A` (contoh: `11:00 AM`) dan tanggal live berformat `MM/DD/YYYY` (contoh: `10/05/2021`).
 
