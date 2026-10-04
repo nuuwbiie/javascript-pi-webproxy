@@ -110,7 +110,7 @@ export function StartMenu({ isOpen, onClose, onOpenApp }: StartMenuProps) {
     { id: 'm02', name: 'Alarick (Anggota 02)', icon: <WinTeamIcon />, appId: 'profile', payload: { memberId: '02' } },
     { id: 'm03', name: 'Pasha (Anggota 03)', icon: <WinTeamIcon />, appId: 'profile', payload: { memberId: '03' } },
     { id: 'm04', name: 'Rafi (Anggota 04)', icon: <WinTeamIcon />, appId: 'profile', payload: { memberId: '04' } },
-    { id: 'm05', name: 'Anggota 05', icon: <WinTeamIcon />, appId: 'profile', payload: { memberId: '05' } },
+    { id: 'm05', name: 'Fikri (Anggota 05)', icon: <WinTeamIcon />, appId: 'profile', payload: { memberId: '05' } },
     { id: 'm06', name: 'Athena (Anggota 06)', icon: <WinTeamIcon />, appId: 'profile', payload: { memberId: '06' } },
     { id: 'm07', name: 'Rafha (Anggota 07)', icon: <WinTeamIcon />, appId: 'profile', payload: { memberId: '07' } },
     { id: 'm08', name: 'Anggito (Anggota 08)', icon: <WinTeamIcon />, appId: 'profile', payload: { memberId: '08' } },

@@ -1,7 +1,7 @@
 import type { Member } from '../types'
 
-const rawMembers: [string, string, string, string, string, string[]][] = [
-  ['05', 'Nama Anggota 05', 'Anggota 05', 'Mahasiswa Ilmu Komputer 62', 'Mendukung pengujian fungsionalitas dan integrasi komponen aplikasi desktop.', ['Quality Assurance', 'Testing', 'Kode']],
+const rawMembers: [string, string, string, string, string, string[], string?, string?, string?][] = [
+  ['05', 'Ahmad Fikri Rizqullah Alim', 'Fikri', 'Mahasiswa Ilmu Komputer 62', 'Informasi profil lainnya belum ditambahkan.', [], '27 Oktober 2006', 'Jakarta Timur', 'https://instagram.com/frizqullah27'],
 ]
 
 export const members: Member[] = [
@@ -263,16 +263,16 @@ export const members: Member[] = [
     cv: '/cvs/irsya.pdf',
     isPlaceholder: false,
   },
-  ...rawMembers.map(([id, name, nickname, role, bio, interests]) => ({
+  ...rawMembers.map(([id, name, nickname, role, bio, interests, birthDate, hometown, instagram]) => ({
     id,
     name,
     nickname,
     role,
     bio,
     interests,
-    birthDate: undefined,
-    hometown: undefined,
-    socials: [{ label: 'Instagram' }, { label: 'LinkedIn' }, { label: 'GitHub' }],
+    birthDate,
+    hometown,
+    socials: [{ label: 'Instagram', url: instagram }, { label: 'LinkedIn' }, { label: 'GitHub' }],
     photo: id === '05' ? '/members/anggota05.jpg' : undefined,
     isPlaceholder: true,
   })),

@@ -1,12 +1,14 @@
 import type { MemoryItem } from '../types'
 
-const wallpaper = '/proxy-campus.png'
-
 export const memories: MemoryItem[] = [
-  { id: 'm1', title: 'Hari pertama bersama', caption: 'Ruang untuk foto kegiatan yang sudah disetujui.', category: 'Pekan Ilkomerz', src: wallpaper, alt: 'Contoh visual kampus untuk slot dokumentasi hari pertama', position: '50% 72%', isPlaceholder: true },
-  { id: 'm2', title: 'Di balik persiapan', caption: 'Ganti dengan momen persiapan tim.', category: 'Behind the Scenes', src: wallpaper, alt: 'Contoh visual kampus untuk slot dokumentasi persiapan', position: '18% 65%', isPlaceholder: true },
-  { id: 'm3', title: 'Lima orang, satu koneksi', caption: 'Ganti dengan foto grup final.', category: 'Our Team', src: wallpaper, alt: 'Contoh visual kampus untuk slot foto grup', position: '82% 68%', isPlaceholder: true },
-  { id: 'm4', title: 'Diskusi kelompok', caption: 'Ganti dengan dokumentasi diskusi.', category: 'Behind the Scenes', src: wallpaper, alt: 'Contoh visual kampus untuk slot diskusi kelompok', position: '35% 82%', isPlaceholder: true },
-  { id: 'm5', title: 'Catatan proses', caption: 'Ganti dengan dokumentasi catatan atau papan kerja.', category: 'Pekan Ilkomerz', src: wallpaper, alt: 'Contoh visual kampus untuk slot catatan proses', position: '65% 78%', isPlaceholder: true },
-  { id: 'm6', title: 'Sampai jumpa di progres berikutnya', caption: 'Ganti dengan foto penutup kegiatan.', category: 'Our Team', src: wallpaper, alt: 'Contoh visual kampus untuk slot foto penutup', position: '50% 55%', isPlaceholder: true },
+  { id: 'm1', title: 'Pekan Ilkomerz · Hari 1', caption: 'Dokumentasi kebersamaan kelompok pada hari pertama Pekan Ilkomerz.', category: 'Pekan Ilkomerz', src: '/foto-bareng/Day1PI.jpg', alt: 'Foto bersama kelompok pada hari pertama Pekan Ilkomerz', position: '50% 50%', isPlaceholder: false },
+  { id: 'm2', title: 'Pekan Ilkomerz · Hari 2', caption: 'Dokumentasi kebersamaan kelompok pada hari kedua Pekan Ilkomerz.', category: 'Pekan Ilkomerz', src: '/foto-bareng/Day2PI.jpg', alt: 'Foto bersama kelompok pada hari kedua Pekan Ilkomerz', position: '50% 50%', isPlaceholder: false },
+  { id: 'm3', title: 'Pekan Ilkomerz · Hari 3', caption: 'Dokumentasi kebersamaan kelompok pada hari ketiga Pekan Ilkomerz.', category: 'Pekan Ilkomerz', src: '/foto-bareng/Day3PI.jpg', alt: 'Foto bersama kelompok pada hari ketiga Pekan Ilkomerz', position: '50% 50%', isPlaceholder: false },
+  { id: 'm4', title: 'Pekan Ilkomerz · Hari 4', caption: 'Dokumentasi kebersamaan kelompok pada hari keempat Pekan Ilkomerz.', category: 'Pekan Ilkomerz', src: '/foto-bareng/Day4PI.jpg', alt: 'Foto bersama kelompok pada hari keempat Pekan Ilkomerz', position: '50% 50%', isPlaceholder: false },
+  { id: 'm5', title: 'Pekan Ilkomerz · Hari 5', caption: 'Dokumentasi kebersamaan kelompok pada hari kelima Pekan Ilkomerz.', category: 'Pekan Ilkomerz', src: '/foto-bareng/Day5PI.jpeg', alt: 'Foto bersama kelompok pada hari kelima Pekan Ilkomerz', position: '50% 50%', isPlaceholder: false },
+  { id: 'm6', title: 'Forum Day', caption: 'Dokumentasi kelompok saat Forum Day.', category: 'Pekan Ilkomerz', src: '/foto-bareng/ForumDay.jpg', alt: 'Foto bersama kelompok saat Forum Day', position: '50% 50%', isPlaceholder: false },
+  { id: 'm7', title: 'Komtroopers · Momen 1', caption: 'Momen kebersamaan Komtroopers.', category: 'Our Team', src: '/foto-bareng/Komtroopers-1.jpg', alt: 'Foto bersama Komtroopers, momen pertama', position: '50% 50%', isPlaceholder: false },
+  { id: 'm8', title: 'Komtroopers · Momen 2', caption: 'Momen kebersamaan Komtroopers.', category: 'Our Team', src: '/foto-bareng/Komtroopers-2.jpg', alt: 'Foto bersama Komtroopers, momen kedua', position: '50% 50%', isPlaceholder: false },
+  { id: 'm9', title: 'Komtroopers · Momen 3', caption: 'Momen kebersamaan Komtroopers.', category: 'Our Team', src: '/foto-bareng/Komtroopers-3.jpg', alt: 'Foto bersama Komtroopers, momen ketiga', position: '50% 50%', isPlaceholder: false },
+  { id: 'm10', title: 'Select Your Captain', caption: 'Dokumentasi kegiatan Select Your Captain.', category: 'Behind the Scenes', src: '/foto-bareng/SelectYourCaptain.jpg', alt: 'Foto kegiatan Select Your Captain', position: '50% 50%', isPlaceholder: false },
 ]
